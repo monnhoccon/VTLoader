@@ -1,2 +1,6 @@
 # VTLoader
-Download Manga
+Script download manga with python simple
+
+# Use
+python main.py
+input link
