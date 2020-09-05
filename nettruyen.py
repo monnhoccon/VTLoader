@@ -48,12 +48,3 @@ def dl_img(img_url,tentruyen,chapterfol,chap_url):
     response = requests.get(img_url,stream=True,headers=headers)
     file_img = open(tentruyen + "/" + chapterfol + "/" + filename, "wb")
     shutil.copyfileobj(response.raw, file_img)
-
-if __name__ == '__main__':
-  url = 'http://nhattruyen.com/truyen-tranh/nguoi-choi-loi-28854'
-  all_chap = get_chap(url)
-  for chap in reversed(all_chap):
-    chap_url = chap.attrs['href']
-    all_img = get_img(chap_url)
-    for i in all_img:
-      dl_img(i,get_truyen(url),get_name_chap(chap_url).split('-')[1],chap_url)
