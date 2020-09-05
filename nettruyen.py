@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 import shutil
 
-hostname = 'http://www.nettruyen.com'
+hostname = 'http://www.nettruyen.com & http://nhattruyen.com'
 session = HTMLSession()
 
 def get_chap(url):
@@ -13,12 +13,6 @@ def get_chap(url):
   chapter_link =r.html.find('.list-chapter ul li a', first=False)
   return chapter_link
   #get all chapter
-
-def get_id(url):
-  r = session.get(url)
-  chapter_id =r.html.find('.comment-form input', first=False)[4].attrs['value']
-  return chapter_id
-  #get id chapter for get images
 
 def get_img(url):
   r = session.get(url)
@@ -54,3 +48,12 @@ def dl_img(img_url,tentruyen,chapterfol,chap_url):
     response = requests.get(img_url,stream=True,headers=headers)
     file_img = open(tentruyen + "/" + chapterfol + "/" + filename, "wb")
     shutil.copyfileobj(response.raw, file_img)
+
+if __name__ == '__main__':
+  url = 'http://nhattruyen.com/truyen-tranh/nguoi-choi-loi-28854'
+  all_chap = get_chap(url)
+  for chap in reversed(all_chap):
+    chap_url = chap.attrs['href']
+    all_img = get_img(chap_url)
+    for i in all_img:
+      dl_img(i,get_truyen(url),get_name_chap(chap_url).split('-')[1],chap_url)

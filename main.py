@@ -20,6 +20,7 @@ TRUYENTRANH24 = 'https://truyentranh24.com'
 TRUYENVN = 'https://truyenvn.com'
 TCTRUYEN = 'https://tctruyen.com'
 NETTRUYEN = 'http://www.nettruyen.com'
+NHATTRUYEN = 'http://nhattruyen.com'
 
 # scriptname and link
 lenArgv = 2
@@ -121,7 +122,7 @@ def handleLink(link):
 						lbar.update(1)
 		except:			
 			exit()
-	elif link.startswith(NETTRUYEN):
+	elif link.startswith(NETTRUYEN) or link.startswith(NHATTRUYEN):
 		try:
 			all_chap = nettruyen.get_chap(link)
 			print('\n-> Detected\n-> Website :', nettruyen.hostname, '\n-> Manga : ', nettruyen.get_truyen(link),'\n-> Chapter : ', len(all_chap),'\n\n')
