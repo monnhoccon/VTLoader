@@ -25,7 +25,11 @@ def get_img(url):
   data =r.html.find('.reading-detail img', first=False)
   list_img=[]
   for i in data:
-      list_img.append(i.attrs['data-cdn'])
+    get_i = i.attrs
+    if(hasattr(get_i, 'data-cdn') == False):
+      list_img.append(i.attrs['src'])
+    else:
+      list_img.append(i.attrs['data-cdn'])  
   return list_img
   #get all img in chapter
 
