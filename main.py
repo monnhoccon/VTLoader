@@ -12,12 +12,14 @@ import beeng
 import truyentranh24
 import truyenvn
 import tctruyen
+import nettruyen
 
 TRUYENQQ = 'http://truyenqq.com'
 BEENG = 'https://beeng.net'
 TRUYENTRANH24 = 'https://truyentranh24.com'
 TRUYENVN = 'https://truyenvn.com'
 TCTRUYEN = 'https://tctruyen.com'
+NETTRUYEN = 'http://www.nettruyen.com'
 
 # scriptname and link
 lenArgv = 2
@@ -119,7 +121,25 @@ def handleLink(link):
 						lbar.update(1)
 		except:			
 			exit()
-
+	elif link.startswith(NETTRUYEN):
+		try:
+			all_chap = nettruyen.get_chap(link)
+			print('\n-> Detected\n-> Website :', nettruyen.hostname, '\n-> Manga : ', nettruyen.get_truyen(link),'\n-> Chapter : ', len(all_chap),'\n\n')
+			askDown = input('Download Manga (y/n): ')
+			if askDown.lower().strip() in ('y', 'yes'):
+				print('\nStart Download...\n')
+				with tqdm(total = len(all_chap), desc = 'All Chapter',unit = "MB",ncols = 80,position=0) as lbar:
+					for d in reversed(all_chap):
+						chap_url = d.attrs['href']
+						chuong = nettruyen.get_name_chap(chap_url).split('-')[1]
+						all_img = nettruyen.get_img(chap_url)
+						with tqdm(total = len(all_img), desc = chuong,unit = "MB",ncols = 80,leave=False,position=1) as pbar:
+							for x in all_img:
+								nettruyen.dl_img(x,nettruyen.get_truyen(link),chuong,chap_url)
+								pbar.update(1)
+						lbar.update(1)
+		except:			
+			exit()
 def main():
 	# if get link from argv
 	if lenArgv == len(argv):
@@ -131,5 +151,5 @@ def main():
 	handleLink(link)
 
 if __name__ == '__main__':
-	print('Bạn đang sử dụng tool tải truyện VTLoader\nTool hỗ trợ các site:\nBeeng,TruyenVN,Truyentranh24,Truyenqq,TCTruyen.\nĐể tải truyện nhập link truyện tại bên dưới\n\n')
+	print('Bạn đang sử dụng tool tải truyện VTLoader\nTool hỗ trợ các site:\nBeeng,TruyenVN,Truyentranh24,Truyenqq,TCTruyen,Nettruyen.\nĐể tải truyện nhập link truyện tại bên dưới\n\n')
 	main()
